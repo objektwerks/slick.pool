@@ -1,5 +1,5 @@
-Slick
------
+Slick Pool
+----------
 >Pool domain model using Slick and H2.
 
 Object Model
