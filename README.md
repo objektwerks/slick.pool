@@ -2,6 +2,12 @@ Slick Pool
 ----------
 >Pool domain model using Slick and H2.
 
+Scala 3 Bug
+-----------
+>See this PR ( https://github.com/slick/slick/pull/2760 ). The workaround is
+>simple, just define ```def tupled = (apply _).tupled``` in the companion
+>object of each case class and it will compile for all Scala versions.
+
 Object Model
 ------------
 * Pool(id, built, gallons, street, city, state, zip)
