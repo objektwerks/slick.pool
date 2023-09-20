@@ -43,6 +43,20 @@ Measurements
 | temperature                       | 50 - 100  | 75 - 85     | 82    |
  
 ** Units of Measure - oz, gl, lb
+
+Chemicals
+---------
+* Liquids measured in: gallons ( gl ) and liters ( l ).
+* Granules measured in: pounds ( lbs ) and kilograms ( kg ).
+1. LiquidChlorine ( gl/l )
+2. Trichlor ( tablet )
+3. Dichlor ( lbs/kg )
+4. CalciumHypochlorite ( lbs/kg )
+5. Stabilizer ( lbs/kg )
+6. Algaecide ( gl/l )
+7. MuriaticAcid ( gl/l )
+8. Salt ( lbs/kg )
+
 Solutions
 ---------
 >Suggested solutions to chemical imbalances.
