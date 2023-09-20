@@ -43,6 +43,17 @@ Measurements
 | temperature                       | 50 - 100  | 75 - 85     | 82    |
  
 ** Units of Measure - oz, gl, lb
+Solutions
+---------
+>Suggested solutions to chemical imbalances.
+1. high ph - Sodium Bisulfate
+2. low ph - Sodium Carbonate, Soda Ash
+3. high alkalinity - Muriatic Acid, Sodium Bisulfate
+4. low alkalinity - Sodium Bicarbonate, Baking Soda
+5. calcium hardness - Calcium Chloride
+6. low chlorine - Chlorine Tablets, Granules, Liquid
+7. algae - Algaecide, Shock
+8. stains - Stain Identification Kit, Stain Remover
 
 Test
 ----
