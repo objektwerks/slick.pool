@@ -2,6 +2,10 @@ Slick Pool
 ----------
 >Pool domain model using Slick, H2 and Scala 3.
 
+Test
+----
+1. sbt clean test
+
 Warning
 -------
 >Slick support for Scala 3 is still a **WIP**. Switch back to Scala 2.13.12 and Slick 3.4.1 if you require working Slick code. :)
@@ -74,7 +78,3 @@ Solutions
 6. low chlorine - Chlorine Tablets, Granules, Liquid
 7. algae - Algaecide, Shock
 8. stains - Stain Identification Kit, Stain Remover
-
-Test
-----
-1. sbt clean test
