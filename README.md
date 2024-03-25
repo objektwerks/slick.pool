@@ -2,13 +2,13 @@ Slick Pool
 ----------
 >Pool domain model using Slick, H2 and Scala 3.
 
+TODO
+----
+* Upgrade to Slick 3.5. Requires significant work!
+
 Test
 ----
 1. sbt clean test
-
-Warning
--------
->Slick support for Scala 3 is still a **WIP**. Switch back to Scala 2.13.12 and Slick 3.4.1 if you require working Slick code. :)
 
 Object Model
 ------------
