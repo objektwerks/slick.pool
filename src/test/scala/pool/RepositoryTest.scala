@@ -8,5 +8,6 @@ class RepositoryTest extends AnyFunSuite:
   test("repository"):
     val config = ConfigFactory.load("test.conf")
     val repository = Repository(config)
-    repository.schema.createStatements foreach println
+    repository.createSchema()
+    repository.dropSchema()
     repository.close()
