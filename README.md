@@ -2,10 +2,6 @@ Slick Pool
 ----------
 >Pool domain model using Slick, H2 and Scala 3.
 
-TODO
-----
-* Upgrade to Slick 3.5. Requires significant work!
-
 Test
 ----
 1. sbt clean test
