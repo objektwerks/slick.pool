@@ -19,9 +19,6 @@ object Entity:
   given Ordering[Supply] = Ordering.by(_.purchased)
   given Ordering[Repair] = Ordering.by(_.on)
 
-  val dateFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd")
-  val timeFormatter = DateTimeFormatter.ofPattern("hh:mm")
-
 final case class Pool(id: Int = 0, 
                       built: String = LocalDate.now.toString, 
                       gallons: Int = 10000, 
