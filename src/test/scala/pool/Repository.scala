@@ -29,9 +29,9 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
                  val awaitDuration: Duration = 1 second) {
   import profile.api._
 
-  given timeMapper = MappedColumnType.base[LocalTime, Time](lt => Time.valueOf(lt), t => t.toLocalTime)
-  given dateMapper = MappedColumnType.base[LocalDate, Date](ld => Date.valueOf(ld), d => d.toLocalDate)
-  given dateTimeMapper = MappedColumnType.base[LocalDateTime, Timestamp](ldt => Timestamp.valueOf(ldt), ts => ts.toLocalDateTime)
+  //given timeMapper = MappedColumnType.base[LocalTime, Time](lt => Time.valueOf(lt), t => t.toLocalTime)
+  //given dateMapper = MappedColumnType.base[LocalDate, Date](ld => Date.valueOf(ld), d => d.toLocalDate)
+  //given dateTimeMapper = MappedColumnType.base[LocalDateTime, Timestamp](ldt => Timestamp.valueOf(ldt), ts => ts.toLocalDateTime)
 
   val db = config.db
   val schema = pools.schema ++ owners.schema ++ surfaces.schema ++ pumps.schema ++ timers.schema ++ heaters.schema ++
@@ -64,8 +64,7 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
     def save(pool: Pool) = (this returning this.map(_.id)).insertOrUpdate(pool)
     def list() = compiledList.result
 
-  class Owners(tag: Tag) extends Table[Owner](tag, "owners") {
-    def * = (id, poolId, since, first, last, email).<>(Owner.tupled, Owner.unapply)
+  class Owners(tag: Tag) extends Table[Owner](tag, "owners"):
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def poolId = column[Int]("pool_id")
     def since = column[LocalDate]("since")
@@ -73,12 +72,12 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
     def last = column[String]("last")
     def email = column[String]("email")
     def poolFk = foreignKey("pool_owner_fk", poolId, TableQuery[Pools])(_.id)
-  }
-  object owners extends TableQuery(new Owners(_)) {
-    val compiledList = Compiled { poolId: Rep[Int] => filter(_.poolId === poolId).sortBy(o => (o.since.desc, o.last.asc)) }
+    def * = (id, poolId, since, first, last, email).mapTo[Owner]
+
+  object owners extends TableQuery(new Owners(_)):
+    val compiledList = Compiled { ( poolId: Rep[Int] ) => filter(_.poolId === poolId).sortBy(o => (o.since.desc, o.last.asc)) }
     def save(owner: Owner) = (this returning this.map(_.id)).insertOrUpdate(owner)
     def list(poolId: Int) = compiledList(poolId).result
-  }
 
   class Surfaces(tag: Tag) extends Table[Surface](tag, "surfaces") {
     def * = (id, poolId, installed, kind).<>(Surface.tupled, Surface.unapply)
