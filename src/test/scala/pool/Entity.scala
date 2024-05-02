@@ -26,7 +26,7 @@ object Entity:
   val timeFormatter = DateTimeFormatter.ofPattern("hh:mm")
 
 final case class Pool(id: Int = 0, 
-                      built: LocalDate = LocalDate.now, 
+                      built: String = LocalDate.now.toString, 
                       gallons: Int = 10000, 
                       street: String = "street", 
                       city: String = "city", 
@@ -35,41 +35,41 @@ final case class Pool(id: Int = 0,
 
 final case class Owner(id: Int = 0, 
                        poolId: Int, 
-                       since: LocalDate = LocalDate.now, 
+                       since: String = LocalDate.now.toString, 
                        first: String = "first", 
                        last: String = "last", 
                        email: String = "your@email.org") extends Entity
 
 final case class Surface(id: Int = 0, 
                          poolId: Int, 
-                         installed: LocalDate = LocalDate.now, 
+                         installed: String = LocalDate.now.toString, 
                          kind: String = "kind") extends Entity
 
 final case class Pump(id: Int = 0, 
                       poolId: Int, 
-                      installed: LocalDate = LocalDate.now, 
+                      installed: String = LocalDate.now.toString, 
                       model: String = "model") extends Entity
 
 final case class Timer(id: Int = 0, 
                        poolId: Int, 
-                       installed: LocalDate = LocalDate.now, 
+                       installed: String = LocalDate.now.toString, 
                        model: String = "model") extends Entity
 
 final case class Heater(id: Int = 0, 
                         poolId: Int, 
-                        installed: LocalDate = LocalDate.now, 
+                        installed: String = LocalDate.now.toString, 
                         model: String = "model") extends Entity
 
 final case class Lifecycle(id: Int = 0, 
                            poolId: Int, 
-                           created: LocalDate = LocalDate.now, 
+                           created: String = LocalDate.now.toString, 
                            active: Boolean = true, 
-                           pumpOn: LocalTime = LocalTime.of(9, 0), 
-                           pumpOff: LocalTime = LocalTime.of(17, 0)) extends Entity
+                           pumpOn: String = LocalTime.of(9, 0).toString, 
+                           pumpOff: String = LocalTime.of(17, 0).toString) extends Entity
 
 final case class Cleaning(id: Int = 0, 
                           poolId: Int, 
-                          on: LocalDate = LocalDate.now, 
+                          on: String = LocalDate.now.toString, 
                           deck: Boolean = true, 
                           brush: Boolean = true, 
                           net: Boolean = true,
@@ -80,7 +80,7 @@ final case class Cleaning(id: Int = 0,
 
 final case class Measurement(id: Int = 0, 
                              poolId: Int, 
-                             on: LocalDate = LocalDate.now, 
+                             on: String = LocalDate.now.toString, 
                              temp: Double = 75.0, 
                              hardness: Double = 375.0, 
                              totalChlorine: Double = 3,
@@ -92,14 +92,14 @@ final case class Measurement(id: Int = 0,
 
 final case class Additive(id: Int = 0, 
                           poolId: Int, 
-                          on: LocalDate = LocalDate.now, 
+                          on: String = LocalDate.now.toString, 
                           chemical: String = "cl", 
                           unit: String = "gl", 
                           amount: Double = 1.0) extends Entity
 
 final case class Supply(id: Int = 0, 
                         poolId: Int, 
-                        purchased: LocalDate = LocalDate.now, 
+                        purchased: String = LocalDate.now.toString, 
                         item: String = "cl", 
                         unit: String = "gl", 
                         amount: Double = 1.0, 
@@ -107,6 +107,6 @@ final case class Supply(id: Int = 0,
 
 final case class Repair(id: Int = 0, 
                         poolId: Int, 
-                        on: LocalDate = LocalDate.now, 
+                        on: String = LocalDate.now.toString, 
                         item: String = "repair", 
                         cost: Double = 0.0) extends Entity
