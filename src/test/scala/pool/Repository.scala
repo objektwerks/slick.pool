@@ -13,7 +13,7 @@ import slick.basic.DatabaseConfig
 import slick.jdbc.{H2Profile, JdbcProfile}
 
 object Repository:
-  def apply(config: Config): Repository = {
+  def apply(config: Config): Repository =
     val conf = DatabaseConfig.forConfig[JdbcProfile]("repository", config)
     val repository = new Repository(conf, H2Profile)
     import repository._
@@ -22,7 +22,6 @@ object Repository:
     catch
       case _: Throwable => repository.createSchema()
     repository
-  }
 
 class Repository(val config: DatabaseConfig[JdbcProfile],
                  val profile: JdbcProfile, 
@@ -94,10 +93,10 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
 
   class Pumps(tag: Tag) extends Table[Pump](tag, "pumps"):
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
+    def poolId = column[Int]("pool_id")
     def installed = column[LocalDate]("installed")
     def model = column[String]("model")
     def poolFk = foreignKey("pool_pump_fk", poolId, TableQuery[Pools])(_.id)
-    def poolId = column[Int]("pool_id")
     def * = (id, poolId, installed, model).mapTo[Pump]
 
   object pumps extends TableQuery(new Pumps(_)):
@@ -107,10 +106,10 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
 
   class Timers(tag: Tag) extends Table[Timer](tag, "timers"):
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
+    def poolId = column[Int]("pool_id")
     def installed = column[LocalDate]("installed")
     def model = column[String]("model")
     def poolFk = foreignKey("pool_timer_fk", poolId, TableQuery[Pools])(_.id)
-    def poolId = column[Int]("pool_id")
     def * = (id, poolId, installed, model).mapTo[Timer]
 
   object timers extends TableQuery(new Timers(_)):
@@ -120,10 +119,10 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
 
   class Heaters(tag: Tag) extends Table[Heater](tag, "heaters"):
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
+    def poolId = column[Int]("pool_id")
     def installed = column[LocalDate]("installed")
     def model = column[String]("model")
     def poolFk = foreignKey("pool_heater_fk", poolId, TableQuery[Pools])(_.id)
-    def poolId = column[Int]("pool_id")
     def * = (id, poolId, installed, model).mapTo[Heater]
 
   object heaters extends TableQuery(new Heaters(_)):
@@ -133,12 +132,12 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
 
   class Lifecycles(tag: Tag) extends Table[Lifecycle](tag, "lifecycles"):
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
+    def poolId = column[Int]("pool_id")
     def created = column[LocalDate]("created")
     def active = column[Boolean]("active")
     def pumpOn = column[LocalTime]("pump_on")
     def pumpOff = column[LocalTime]("pump_off")
     def poolFk = foreignKey("pool_lifecycle_fk", poolId, TableQuery[Pools])(_.id)
-    def poolId = column[Int]("pool_id")
     def * = (id, poolId, created, active, pumpOn, pumpOff).mapTo[Lifecycle]
 
   object lifecycles extends TableQuery(new Lifecycles(_)):
@@ -187,12 +186,12 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
 
   class Additives(tag: Tag) extends Table[Additive](tag, "additives"):
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
+    def poolId = column[Int]("pool_id")
     def on = column[LocalDate]("on")
     def chemical = column[String]("chemical")
     def unit = column[String]("unit")
     def amount = column[Double]("amount")
     def poolFk = foreignKey("pool_additive_fk", poolId, TableQuery[Pools])(_.id)
-    def poolId = column[Int]("pool_id")
     def * = (id, poolId, on, chemical, unit, amount).mapTo[Additive]
 
   object additives extends TableQuery(new Additives(_)):
