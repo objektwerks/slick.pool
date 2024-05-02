@@ -25,7 +25,7 @@ object Repository:
 
 class Repository(val config: DatabaseConfig[JdbcProfile],
                  val profile: JdbcProfile, 
-                 val awaitDuration: Duration = 1 second) {
+                 val awaitDuration: Duration = 1 second):
   import profile.api._
 
   //given timeMapper = MappedColumnType.base[LocalTime, Time](lt => Time.valueOf(lt), t => t.toLocalTime)
@@ -87,7 +87,7 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
     def * = (id, poolId, installed, kind).mapTo[Surface]
 
   object surfaces extends TableQuery(new Surfaces(_)):
-    val compiledList = Compiled { poolId: Rep[Int] => filter(_.poolId === poolId).sortBy(_.installed.desc) }
+    val compiledList = Compiled { ( poolId: Rep[Int] ) => filter(_.poolId === poolId).sortBy(_.installed.desc) }
     def save(surface: Surface) = (this returning this.map(_.id)).insertOrUpdate(surface)
     def list(poolId: Int) = compiledList(poolId).result
 
@@ -141,7 +141,7 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
     def * = (id, poolId, created, active, pumpOn, pumpOff).mapTo[Lifecycle]
 
   object lifecycles extends TableQuery(new Lifecycles(_)):
-    val compiledList = Compiled { poolId: Rep[Int] => filter(_.poolId === poolId).sortBy(l => (l.active.asc, l.created.desc)) }
+    val compiledList = Compiled { ( poolId: Rep[Int] ) => filter(_.poolId === poolId).sortBy(l => (l.active.asc, l.created.desc)) }
     def save(lifecycle: Lifecycle) = (this returning this.map(_.id)).insertOrUpdate(lifecycle)
     def list(poolId: Int) = compiledList(poolId).result
 
