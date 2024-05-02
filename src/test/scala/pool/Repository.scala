@@ -146,8 +146,7 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
     def save(lifecycle: Lifecycle) = (this returning this.map(_.id)).insertOrUpdate(lifecycle)
     def list(poolId: Int) = compiledList(poolId).result
 
-  class Cleanings(tag: Tag) extends Table[Cleaning](tag, "cleanings") {
-    def * = (id, poolId, on, deck, brush, net, vacuum, skimmerBasket, pumpBasket, pumpFilter).<>(Cleaning.tupled, Cleaning.unapply)
+  class Cleanings(tag: Tag) extends Table[Cleaning](tag, "cleanings"):
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def poolId = column[Int]("pool_id")
     def on = column[LocalDate]("on")
@@ -159,12 +158,12 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
     def pumpBasket = column[Boolean]("pump_basket")
     def pumpFilter = column[Boolean]("pump_filter")
     def poolFk = foreignKey("pool_cleaning_fk", poolId, TableQuery[Pools])(_.id)
-  }
-  object cleanings extends TableQuery(new Cleanings(_)) {
-    val compiledList = Compiled { poolid: Rep[Int] => filter(_.poolId === poolid).sortBy(_.on.desc) }
+    def * = (id, poolId, on, deck, brush, net, vacuum, skimmerBasket, pumpBasket, pumpFilter).mapTo[Cleaning]
+
+  object cleanings extends TableQuery(new Cleanings(_)):
+    val compiledList = Compiled { ( poolid: Rep[Int] ) => filter(_.poolId === poolid).sortBy(_.on.desc) }
     def save(cleaning: Cleaning) = (this returning this.map(_.id)).insertOrUpdate(cleaning)
     def list(poolId: Int) = compiledList(poolId).result
-  }
 
   class Measurements(tag: Tag) extends Table[Measurement](tag, "measurements") {
     def * = (id, poolId, on, temp, hardness, totalChlorine, bromine, freeChlorine, pH, alkalinity, cyanuricAcid).<>(Measurement.tupled, Measurement.unapply)
