@@ -44,7 +44,7 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
 
   class Pools(tag: Tag) extends Table[Pool](tag, "pools"):
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
-    def built = column[LocalDate]("built")
+    def built = column[String]("built")
     def gallons = column[Int]("gallons")
     def street = column[String]("street")
     def city = column[String]("city")
@@ -62,7 +62,7 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
   class Owners(tag: Tag) extends Table[Owner](tag, "owners"):
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def poolId = column[Int]("pool_id")
-    def since = column[LocalDate]("since")
+    def since = column[String]("since")
     def first = column[String]("first")
     def last = column[String]("last")
     def email = column[String]("email")
@@ -77,7 +77,7 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
   class Surfaces(tag: Tag) extends Table[Surface](tag, "surfaces"):
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def poolId = column[Int]("pool_id")
-    def installed = column[LocalDate]("installed")
+    def installed = column[String]("installed")
     def kind = column[String]("kind")
     def poolFk = foreignKey("pool_surface_fk", poolId, TableQuery[Pools])(_.id)
     def * = (id, poolId, installed, kind).mapTo[Surface]
@@ -90,7 +90,7 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
   class Pumps(tag: Tag) extends Table[Pump](tag, "pumps"):
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def poolId = column[Int]("pool_id")
-    def installed = column[LocalDate]("installed")
+    def installed = column[String]("installed")
     def model = column[String]("model")
     def poolFk = foreignKey("pool_pump_fk", poolId, TableQuery[Pools])(_.id)
     def * = (id, poolId, installed, model).mapTo[Pump]
@@ -103,7 +103,7 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
   class Timers(tag: Tag) extends Table[Timer](tag, "timers"):
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def poolId = column[Int]("pool_id")
-    def installed = column[LocalDate]("installed")
+    def installed = column[String]("installed")
     def model = column[String]("model")
     def poolFk = foreignKey("pool_timer_fk", poolId, TableQuery[Pools])(_.id)
     def * = (id, poolId, installed, model).mapTo[Timer]
@@ -116,7 +116,7 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
   class Heaters(tag: Tag) extends Table[Heater](tag, "heaters"):
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def poolId = column[Int]("pool_id")
-    def installed = column[LocalDate]("installed")
+    def installed = column[String]("installed")
     def model = column[String]("model")
     def poolFk = foreignKey("pool_heater_fk", poolId, TableQuery[Pools])(_.id)
     def * = (id, poolId, installed, model).mapTo[Heater]
@@ -129,10 +129,10 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
   class Lifecycles(tag: Tag) extends Table[Lifecycle](tag, "lifecycles"):
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def poolId = column[Int]("pool_id")
-    def created = column[LocalDate]("created")
+    def created = column[String]("created")
     def active = column[Boolean]("active")
-    def pumpOn = column[LocalTime]("pump_on")
-    def pumpOff = column[LocalTime]("pump_off")
+    def pumpOn = column[String]("pump_on")
+    def pumpOff = column[String]("pump_off")
     def poolFk = foreignKey("pool_lifecycle_fk", poolId, TableQuery[Pools])(_.id)
     def * = (id, poolId, created, active, pumpOn, pumpOff).mapTo[Lifecycle]
 
@@ -144,7 +144,7 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
   class Cleanings(tag: Tag) extends Table[Cleaning](tag, "cleanings"):
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def poolId = column[Int]("pool_id")
-    def on = column[LocalDate]("on")
+    def on = column[String]("on")
     def deck = column[Boolean]("deck")
     def brush = column[Boolean]("brush")
     def net = column[Boolean]("net")
@@ -163,7 +163,7 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
   class Measurements(tag: Tag) extends Table[Measurement](tag, "measurements"):
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def poolId = column[Int]("pool_id")
-    def on = column[LocalDate]("on")
+    def on = column[String]("on")
     def temp = column[Double]("temp")
     def hardness = column[Double]("hardness")
     def totalChlorine = column[Double]("total_chlorine")
@@ -183,7 +183,7 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
   class Additives(tag: Tag) extends Table[Additive](tag, "additives"):
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def poolId = column[Int]("pool_id")
-    def on = column[LocalDate]("on")
+    def on = column[String]("on")
     def chemical = column[String]("chemical")
     def unit = column[String]("unit")
     def amount = column[Double]("amount")
@@ -198,7 +198,7 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
   class Supplies(tag: Tag) extends Table[Supply](tag, "supplies"):
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def poolId = column[Int]("pool_id")
-    def purchased = column[LocalDate]("purchased")
+    def purchased = column[String]("purchased")
     def item = column[String]("item")
     def unit = column[String]("unit")
     def amount = column[Double]("amount")
@@ -214,7 +214,7 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
   class Repairs(tag: Tag) extends Table[Repair](tag, "repairs"):
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def poolId = column[Int]("pool_id")
-    def on = column[LocalDate]("on")
+    def on = column[String]("on")
     def item = column[String]("item")
     def cost = column[Double]("cost")
     def poolFk = foreignKey("pool_repair_fk", poolId, TableQuery[Pools])(_.id)
