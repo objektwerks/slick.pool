@@ -3,24 +3,24 @@ package pool
 import java.time.format.DateTimeFormatter
 import java.time.{LocalDate, LocalDateTime, LocalTime, ZoneOffset}
 
-sealed trait Entity extends Product with Serializable
+sealed trait Entity
 
 object Entity {
-  implicit def localTimeOrdering: Ordering[LocalTime] = Ordering.by(_.toSecondOfDay)
-  implicit def localDateOrdering: Ordering[LocalDate] = Ordering.by(_.toEpochDay)
-  implicit def localDateTimeOrdering: Ordering[LocalDateTime] = Ordering.by(_.toEpochSecond(ZoneOffset.UTC))
-  implicit def poolOrdering: Ordering[Pool] = Ordering.by(p => (p.zip, p.city))
-  implicit def ownerOrdering: Ordering[Owner] = Ordering.by(o => (o.since, o.last))
-  implicit def surfaceOrdering: Ordering[Surface] = Ordering.by(_.installed)
-  implicit def pumpOrdering: Ordering[Pump] = Ordering.by(_.installed)
-  implicit def timerOrdering: Ordering[Timer] = Ordering.by(_.installed)
-  implicit def heaterOrdering: Ordering[Heater] = Ordering.by(_.installed)
-  implicit def lifecycleOrdering: Ordering[Lifecycle] = Ordering.by(l => (l.active, l.created))
-  implicit def cleaningOrdering: Ordering[Cleaning] = Ordering.by(_.on)
-  implicit def measurementOrdering: Ordering[Measurement] = Ordering.by(_.on)
-  implicit def additiveOrdering: Ordering[Additive] = Ordering.by(_.on)
-  implicit def supplyOrdering: Ordering[Supply] = Ordering.by(_.purchased)
-  implicit def repairOrdering: Ordering[Repair] = Ordering.by(_.on)
+  given localTimeOrdering: Ordering[LocalTime] = Ordering.by(_.toSecondOfDay)
+  given localDateOrdering: Ordering[LocalDate] = Ordering.by(_.toEpochDay)
+  given localDateTimeOrdering: Ordering[LocalDateTime] = Ordering.by(_.toEpochSecond(ZoneOffset.UTC))
+  given poolOrdering: Ordering[Pool] = Ordering.by(p => (p.zip, p.city))
+  given ownerOrdering: Ordering[Owner] = Ordering.by(o => (o.since, o.last))
+  given surfaceOrdering: Ordering[Surface] = Ordering.by(_.installed)
+  given pumpOrdering: Ordering[Pump] = Ordering.by(_.installed)
+  given timerOrdering: Ordering[Timer] = Ordering.by(_.installed)
+  given heaterOrdering: Ordering[Heater] = Ordering.by(_.installed)
+  given lifecycleOrdering: Ordering[Lifecycle] = Ordering.by(l => (l.active, l.created))
+  given cleaningOrdering: Ordering[Cleaning] = Ordering.by(_.on)
+  given measurementOrdering: Ordering[Measurement] = Ordering.by(_.on)
+  given additiveOrdering: Ordering[Additive] = Ordering.by(_.on)
+  given supplyOrdering: Ordering[Supply] = Ordering.by(_.purchased)
+  given repairOrdering: Ordering[Repair] = Ordering.by(_.on)
 
   val dateFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd")
   val timeFormatter = DateTimeFormatter.ofPattern("hh:mm")
