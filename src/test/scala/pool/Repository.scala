@@ -37,13 +37,16 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
     lifecycles.schema ++ cleanings.schema ++ measurements.schema ++ additives.schema ++ supplies.schema ++ repairs.schema
 
   def await[T](action: DBIO[T]): T = Await.result(db.run(action), awaitDuration)
+
   def exec[T](action: DBIO[T]): Future[T] = db.run(action)
+
   def close() = db.close()
+
   def createSchema() = await(DBIO.seq(schema.create))
+
   def dropSchema() = await(DBIO.seq(schema.drop))
 
-  class Pools(tag: Tag) extends Table[Pool](tag, "pools") {
-    def * = (id, built, gallons, street, city, state, zip).<>(Pool.tupled, Pool.unapply)
+  class Pools(tag: Tag) extends Table[Pool](tag, "pools"):
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def built = column[LocalDate]("built")
     def gallons = column[Int]("gallons")
@@ -51,14 +54,14 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
     def city = column[String]("city")
     def state = column[String]("state")
     def zip = column[Int]("zip")
-  }
-  object pools extends TableQuery(new Pools(_)) {
+    def * = (id.?, built, gallons, street, city, state, zip).mapTo[Pool]
+
+  object pools extends TableQuery(new Pools(_)):
     val compiledList = Compiled {
       sortBy(p => (p.zip.asc, p.city.asc))
     }
     def save(pool: Pool) = (this returning this.map(_.id)).insertOrUpdate(pool)
     def list() = compiledList.result
-  }
 
   class Owners(tag: Tag) extends Table[Owner](tag, "owners") {
     def * = (id, poolId, since, first, last, email).<>(Owner.tupled, Owner.unapply)
