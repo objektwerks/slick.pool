@@ -5,26 +5,25 @@ import java.time.{LocalDate, LocalDateTime, LocalTime, ZoneOffset}
 
 sealed trait Entity
 
-object Entity {
-  given localTimeOrdering: Ordering[LocalTime] = Ordering.by(_.toSecondOfDay)
-  given localDateOrdering: Ordering[LocalDate] = Ordering.by(_.toEpochDay)
-  given localDateTimeOrdering: Ordering[LocalDateTime] = Ordering.by(_.toEpochSecond(ZoneOffset.UTC))
-  given poolOrdering: Ordering[Pool] = Ordering.by(p => (p.zip, p.city))
-  given ownerOrdering: Ordering[Owner] = Ordering.by(o => (o.since, o.last))
-  given surfaceOrdering: Ordering[Surface] = Ordering.by(_.installed)
-  given pumpOrdering: Ordering[Pump] = Ordering.by(_.installed)
-  given timerOrdering: Ordering[Timer] = Ordering.by(_.installed)
-  given heaterOrdering: Ordering[Heater] = Ordering.by(_.installed)
-  given lifecycleOrdering: Ordering[Lifecycle] = Ordering.by(l => (l.active, l.created))
-  given cleaningOrdering: Ordering[Cleaning] = Ordering.by(_.on)
-  given measurementOrdering: Ordering[Measurement] = Ordering.by(_.on)
-  given additiveOrdering: Ordering[Additive] = Ordering.by(_.on)
-  given supplyOrdering: Ordering[Supply] = Ordering.by(_.purchased)
-  given repairOrdering: Ordering[Repair] = Ordering.by(_.on)
+object Entity:
+  given Ordering[LocalTime] = Ordering.by(_.toSecondOfDay)
+  given Ordering[LocalDate] = Ordering.by(_.toEpochDay)
+  given Ordering[LocalDateTime] = Ordering.by(_.toEpochSecond(ZoneOffset.UTC))
+  given Ordering[Pool] = Ordering.by(p => (p.zip, p.city))
+  given Ordering[Owner] = Ordering.by(o => (o.since, o.last))
+  given Ordering[Surface] = Ordering.by(_.installed)
+  given Ordering[Pump] = Ordering.by(_.installed)
+  given Ordering[Timer] = Ordering.by(_.installed)
+  given Ordering[Heater] = Ordering.by(_.installed)
+  given Ordering[Lifecycle] = Ordering.by(l => (l.active, l.created))
+  given Ordering[Cleaning] = Ordering.by(_.on)
+  given Ordering[Measurement] = Ordering.by(_.on)
+  given Ordering[Additive] = Ordering.by(_.on)
+  given Ordering[Supply] = Ordering.by(_.purchased)
+  given Ordering[Repair] = Ordering.by(_.on)
 
   val dateFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd")
   val timeFormatter = DateTimeFormatter.ofPattern("hh:mm")
-}
 
 final case class Pool(id: Int = 0, 
                       built: LocalDate = LocalDate.now, 
