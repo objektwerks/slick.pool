@@ -5,11 +5,11 @@ import com.typesafe.config.Config
 import java.sql.{Date, Time, Timestamp}
 import java.time.{LocalDate, LocalDateTime, LocalTime}
 
-import slick.basic.DatabaseConfig
-import slick.jdbc.{H2Profile, JdbcProfile}
-
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
+
+import slick.basic.DatabaseConfig
+import slick.jdbc.{H2Profile, JdbcProfile}
 
 object Repository:
   def apply(config: Config): Repository = {
@@ -28,9 +28,9 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
                  val awaitDuration: Duration = 1 second) {
   import profile.api._
 
-  implicit val timeMapper = MappedColumnType.base[LocalTime, Time](lt => Time.valueOf(lt), t => t.toLocalTime)
-  implicit val dateMapper = MappedColumnType.base[LocalDate, Date](ld => Date.valueOf(ld), d => d.toLocalDate)
-  implicit val dateTimeMapper = MappedColumnType.base[LocalDateTime, Timestamp](ldt => Timestamp.valueOf(ldt), ts => ts.toLocalDateTime)
+  given timeMapper = MappedColumnType.base[LocalTime, Time](lt => Time.valueOf(lt), t => t.toLocalTime)
+  given dateMapper = MappedColumnType.base[LocalDate, Date](ld => Date.valueOf(ld), d => d.toLocalDate)
+  given dateTimeMapper = MappedColumnType.base[LocalDateTime, Timestamp](ldt => Timestamp.valueOf(ldt), ts => ts.toLocalDateTime)
 
   val db = config.db
   val schema = pools.schema ++ owners.schema ++ surfaces.schema ++ pumps.schema ++ timers.schema ++ heaters.schema ++
