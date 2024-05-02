@@ -105,19 +105,18 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
     def save(pump: Pump) = (this returning this.map(_.id)).insertOrUpdate(pump)
     def list(poolId: Int) = compiledList(poolId).result
 
-  class Timers(tag: Tag) extends Table[Timer](tag, "timers") {
-    def * = (id, poolId, installed, model).<>(Timer.tupled, Timer.unapply)
+  class Timers(tag: Tag) extends Table[Timer](tag, "timers"):
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def installed = column[LocalDate]("installed")
     def model = column[String]("model")
     def poolFk = foreignKey("pool_timer_fk", poolId, TableQuery[Pools])(_.id)
     def poolId = column[Int]("pool_id")
-  }
-  object timers extends TableQuery(new Timers(_)) {
-    val compiledList = Compiled { poolId: Rep[Int] => filter(_.poolId === poolId).sortBy(_.installed.desc) }
+    def * = (id, poolId, installed, model).mapTo[Timer]
+
+  object timers extends TableQuery(new Timers(_)):
+    val compiledList = Compiled { ( poolId: Rep[Int] ) => filter(_.poolId === poolId).sortBy(_.installed.desc) }
     def save(timer: Timer) = (this returning this.map(_.id)).insertOrUpdate(timer)
     def list(poolId: Int) = compiledList(poolId).result
-  }
 
   class Heaters(tag: Tag) extends Table[Heater](tag, "heaters") {
     def * = (id, poolId, installed, model).<>(Heater.tupled, Heater.unapply)
