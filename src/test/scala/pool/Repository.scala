@@ -2,9 +2,6 @@ package pool
 
 import com.typesafe.config.Config
 
-import java.sql.{Date, Time, Timestamp}
-import java.time.{LocalDate, LocalDateTime, LocalTime}
-
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 import scala.language.postfixOps
@@ -67,7 +64,7 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
     def last = column[String]("last")
     def email = column[String]("email")
     def poolFk = foreignKey("pool_owner_fk", poolId, TableQuery[Pools])(_.id)
-    def * = (id, poolId, since, first, last, email).mapTo[Owner]
+    def * = (id.?, poolId, since, first, last, email).mapTo[Owner]
 
   object owners extends TableQuery(new Owners(_)):
     val compiledList = Compiled { ( poolId: Rep[Int] ) => filter(_.poolId === poolId).sortBy(o => (o.since.desc, o.last.asc)) }
@@ -80,7 +77,7 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
     def installed = column[String]("installed")
     def kind = column[String]("kind")
     def poolFk = foreignKey("pool_surface_fk", poolId, TableQuery[Pools])(_.id)
-    def * = (id, poolId, installed, kind).mapTo[Surface]
+    def * = (id.?, poolId, installed, kind).mapTo[Surface]
 
   object surfaces extends TableQuery(new Surfaces(_)):
     val compiledList = Compiled { ( poolId: Rep[Int] ) => filter(_.poolId === poolId).sortBy(_.installed.desc) }
@@ -93,7 +90,7 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
     def installed = column[String]("installed")
     def model = column[String]("model")
     def poolFk = foreignKey("pool_pump_fk", poolId, TableQuery[Pools])(_.id)
-    def * = (id, poolId, installed, model).mapTo[Pump]
+    def * = (id.?, poolId, installed, model).mapTo[Pump]
 
   object pumps extends TableQuery(new Pumps(_)):
     val compiledList = Compiled { ( poolId: Rep[Int] ) => filter(_.poolId === poolId).sortBy(_.installed.desc) }
@@ -106,7 +103,7 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
     def installed = column[String]("installed")
     def model = column[String]("model")
     def poolFk = foreignKey("pool_timer_fk", poolId, TableQuery[Pools])(_.id)
-    def * = (id, poolId, installed, model).mapTo[Timer]
+    def * = (id.?, poolId, installed, model).mapTo[Timer]
 
   object timers extends TableQuery(new Timers(_)):
     val compiledList = Compiled { ( poolId: Rep[Int] ) => filter(_.poolId === poolId).sortBy(_.installed.desc) }
@@ -119,7 +116,7 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
     def installed = column[String]("installed")
     def model = column[String]("model")
     def poolFk = foreignKey("pool_heater_fk", poolId, TableQuery[Pools])(_.id)
-    def * = (id, poolId, installed, model).mapTo[Heater]
+    def * = (id.?, poolId, installed, model).mapTo[Heater]
 
   object heaters extends TableQuery(new Heaters(_)):
     val compiledList = Compiled { ( poolId: Rep[Int] ) => filter(_.poolId === poolId).sortBy(_.installed.desc) }
@@ -134,7 +131,7 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
     def pumpOn = column[String]("pump_on")
     def pumpOff = column[String]("pump_off")
     def poolFk = foreignKey("pool_lifecycle_fk", poolId, TableQuery[Pools])(_.id)
-    def * = (id, poolId, created, active, pumpOn, pumpOff).mapTo[Lifecycle]
+    def * = (id.?, poolId, created, active, pumpOn, pumpOff).mapTo[Lifecycle]
 
   object lifecycles extends TableQuery(new Lifecycles(_)):
     val compiledList = Compiled { ( poolId: Rep[Int] ) => filter(_.poolId === poolId).sortBy(l => (l.active.asc, l.created.desc)) }
@@ -153,7 +150,7 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
     def pumpBasket = column[Boolean]("pump_basket")
     def pumpFilter = column[Boolean]("pump_filter")
     def poolFk = foreignKey("pool_cleaning_fk", poolId, TableQuery[Pools])(_.id)
-    def * = (id, poolId, on, deck, brush, net, vacuum, skimmerBasket, pumpBasket, pumpFilter).mapTo[Cleaning]
+    def * = (id.?, poolId, on, deck, brush, net, vacuum, skimmerBasket, pumpBasket, pumpFilter).mapTo[Cleaning]
 
   object cleanings extends TableQuery(new Cleanings(_)):
     val compiledList = Compiled { ( poolid: Rep[Int] ) => filter(_.poolId === poolid).sortBy(_.on.desc) }
@@ -173,7 +170,7 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
     def alkalinity = column[Double]("alkalinity")
     def cyanuricAcid = column[Double]("cyanuric_acid")
     def poolFk = foreignKey("pool_measurement_fk", poolId, TableQuery[Pools])(_.id)
-    def * = (id, poolId, on, temp, hardness, totalChlorine, bromine, freeChlorine, pH, alkalinity, cyanuricAcid).mapTo[Measurement]
+    def * = (id.?, poolId, on, temp, hardness, totalChlorine, bromine, freeChlorine, pH, alkalinity, cyanuricAcid).mapTo[Measurement]
 
   object measurements extends TableQuery(new Measurements(_)):
     val compiledList = Compiled { ( poolId: Rep[Int] ) => filter(_.poolId === poolId).sortBy(_.on.desc) }
@@ -188,7 +185,7 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
     def unit = column[String]("unit")
     def amount = column[Double]("amount")
     def poolFk = foreignKey("pool_additive_fk", poolId, TableQuery[Pools])(_.id)
-    def * = (id, poolId, on, chemical, unit, amount).mapTo[Additive]
+    def * = (id.?, poolId, on, chemical, unit, amount).mapTo[Additive]
 
   object additives extends TableQuery(new Additives(_)):
     val compiledList = Compiled { ( poolId: Rep[Int] ) => filter(_.poolId === poolId).sortBy(_.on.desc) }
@@ -204,7 +201,7 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
     def amount = column[Double]("amount")
     def cost = column[Double]("cost")
     def poolFk = foreignKey("pool_supply_fk", poolId, TableQuery[Pools])(_.id)
-    def * = (id, poolId, purchased, item, unit, amount, cost).mapTo[Supply]
+    def * = (id.?, poolId, purchased, item, unit, amount, cost).mapTo[Supply]
 
   object supplies extends TableQuery(new Supplies(_)):
     val compiledList = Compiled { ( poolId: Rep[Int] ) => filter(_.poolId === poolId).sortBy(_.purchased.desc) }
@@ -218,7 +215,7 @@ class Repository(val config: DatabaseConfig[JdbcProfile],
     def item = column[String]("item")
     def cost = column[Double]("cost")
     def poolFk = foreignKey("pool_repair_fk", poolId, TableQuery[Pools])(_.id)
-    def * = (id, poolId, on, item, cost).mapTo[Repair]
+    def * = (id.?, poolId, on, item, cost).mapTo[Repair]
 
   object repairs extends TableQuery(new Repairs(_)):
     val compiledList = Compiled { ( poolId: Rep[Int] ) => filter(_.poolId === poolId).sortBy(_.on.desc) }
