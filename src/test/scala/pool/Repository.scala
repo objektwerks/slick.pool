@@ -9,25 +9,14 @@ import scala.language.postfixOps
 import slick.basic.DatabaseConfig
 import slick.jdbc.{H2Profile, JdbcProfile}
 
-object Repository:
-  def apply(config: Config): Repository =
-    val conf = DatabaseConfig.forConfig[JdbcProfile]("repository", config)
-    val repository = new Repository(conf, H2Profile)
-    import repository._
-    try
-      await(pools.list()).length
-    catch
-      case _: Throwable => repository.createSchema()
-    repository
-
 class Repository(val config: DatabaseConfig[JdbcProfile],
                  val profile: JdbcProfile, 
                  val awaitDuration: Duration = 1 second):
   import profile.api._
 
-  val db = config.db
   val schema = pools.schema ++ owners.schema ++ surfaces.schema ++ pumps.schema ++ timers.schema ++ heaters.schema ++
     lifecycles.schema ++ cleanings.schema ++ measurements.schema ++ additives.schema ++ supplies.schema ++ repairs.schema
+  val db = config.db
 
   def await[T](action: DBIO[T]): T = Await.result(db.run(action), awaitDuration)
 
