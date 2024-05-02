@@ -1,14 +1,11 @@
 package pool
 
 import java.time.format.DateTimeFormatter
-import java.time.{LocalDate, LocalDateTime, LocalTime, ZoneOffset}
+import java.time.{LocalDate, LocalTime}
 
 sealed trait Entity
 
 object Entity:
-  given Ordering[LocalTime] = Ordering.by(_.toSecondOfDay)
-  given Ordering[LocalDate] = Ordering.by(_.toEpochDay)
-  given Ordering[LocalDateTime] = Ordering.by(_.toEpochSecond(ZoneOffset.UTC))
   given Ordering[Pool] = Ordering.by(p => (p.zip, p.city))
   given Ordering[Owner] = Ordering.by(o => (o.since, o.last))
   given Ordering[Surface] = Ordering.by(_.installed)
