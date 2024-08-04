@@ -1,7 +1,7 @@
 name := "slick.pool"
 organization := "objektwerks"
 version := "0.2-SNAPSHOT"
-scalaVersion := "3.5.0-RC5"
+scalaVersion := "3.5.0-RC6"
 libraryDependencies ++= {
   val slickVersion = "3.5.1"
   Seq(
